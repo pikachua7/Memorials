@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
-import Web3 from "web3";
+// import Web3 from "web3";
 import TroveIt from "../../abis/NFT.json";
 import { FingerprintSpinner } from "react-epic-spinners";
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
@@ -10,10 +10,13 @@ import IconButton from "@material-ui/core/IconButton";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { NFTStorage, File } from 'nft.storage';
 import { TextField, Paper, Typography } from "@material-ui/core";
+import bg from './trial.jpg';
 
+
+import Portis from '@portis/web3';
+import Web3 from 'web3';
 const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU2NGI0NjlFYTVlZTIxODNiNDQxNTUwMWRCQWYxNzBiQjdDYTkxOGMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYyNjg1Njg2OTkzMiwibmFtZSI6IkZvb3RwcmludCJ9.QMxvqcHpZJghwlDwMtM4Sfi4_rrAEhljRNrkTDuo1kg'
 const client = new NFTStorage({ token: apiKey })
-
 
 
 const useStyles = (theme) => ({
@@ -30,8 +33,6 @@ const useStyles = (theme) => ({
     width: '30%',
     height: '110%',
     padding: theme.spacing(2),
-    backgroundColor:"transparent",
-    boxShadow:'none'
   },
   form: {
     display: 'flex',
@@ -78,7 +79,10 @@ class Upload extends Component {
 
   async loadBlockchainData() {
 
-    const web3 = window.web3;
+    // const web3 = window.web3;
+
+    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
+    const web3 = new Web3(portis.provider);
 
     // Initialize your dapp here like getting user accounts etc
     // Load account
@@ -196,7 +200,7 @@ class Upload extends Component {
     const { classes } = this.props;
     return (
       <div
-        style={{width: "100%", height: "50%", display: 'flex', justifyContent: 'center' }}
+        style={{width: "100%", height: "100%", display: 'flex', justifyContent: 'center'}}
       >
         {this.state.loading ? (
           <div className="center mt-19">

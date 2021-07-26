@@ -375,7 +375,7 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.16;\r\n\r\nimport \"./ERC721Basic.sol\";\r\n\r\n\r\n/**\r\n * @title ERC-721 Non-Fungible Token Standard, optional enumeration extension\r\n * @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md\r\n */\r\ncontract ERC721Enumerable is ERC721Basic {\r\n  function totalSupply() public view returns (uint256);\r\n  function tokenOfOwnerByIndex(address _owner, uint256 _index) public view returns (uint256 _tokenId);\r\n  function tokenByIndex(uint256 _index) public view returns (uint256);\r\n}\r\n\r\n\r\n/**\r\n * @title ERC-721 Non-Fungible Token Standard, optional metadata extension\r\n * @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md\r\n */\r\ncontract ERC721Metadata is ERC721Basic {\r\n  function name() public view returns (string memory _name);\r\n  function symbol() public view returns (string memory _symbol);\r\n  function tokenURI(uint256 _tokenId) public view returns (string memory);\r\n}\r\n\r\n\r\n/**\r\n * @title ERC-721 Non-Fungible Token Standard, full implementation interface\r\n * @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md\r\n */\r\ncontract ERC721 is ERC721Basic, ERC721Enumerable, ERC721Metadata {\r\n}",
-  "sourcePath": "C:\\Users\\ACER\\Desktop\\Projects\\Blockchain_Projects\\Unnammed\\src\\contracts\\ERC721.sol",
+  "sourcePath": "C:/Users/ACER/Desktop/Projects/Blockchain_Projects/Unnammed/src/contracts/ERC721.sol",
   "ast": {
     "absolutePath": "/C/Users/ACER/Desktop/Projects/Blockchain_Projects/Unnammed/src/contracts/ERC721.sol",
     "exportedSymbols": {
@@ -1724,7 +1724,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-21T18:33:22.743Z",
+  "updatedAt": "2021-07-23T13:23:53.687Z",
   "devdoc": {
     "details": "See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md",
     "methods": {},

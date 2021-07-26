@@ -7,7 +7,8 @@ import Button from "@material-ui/core/Button";
 function Navigation(props) {
   return (
     <div className="navigation">
-      <nav class="py-1 navbar navbar-expand-sm" style={{ backgroundColor: "transparent"}}>
+      <div style={{backgroundImage:`url(${'https://www.w3schools.com/w3images/forestbridge.jpg'})`,opacity:0}} ></div>
+      <nav class="py-1 navbar navbar-expand-sm" >
         <div class="container">
           <img src={icon} style={{ height: 50, width: 150 }} alt="Logo" />
 
@@ -30,10 +31,10 @@ function Navigation(props) {
               >
                 <Button
                   color="white"
-                  // variant="contained"
+                  //variant="contained"
                   size="small"
                   >
-                  <Link class="nav-link" to="/">
+                  <Link class="nav-link" to="/" style={{color:"white"}}>
                     Home
                     <span class="sr-only">(current)</span>
                   </Link>
@@ -46,7 +47,7 @@ function Navigation(props) {
                 color="white"
                 // variant="contained"
                 size="small">
-                  <Link class="nav-link" to="/feed" >
+                  <Link class="nav-link" to="/feed" style={{color:"white"}} >
                     Feeds
                   </Link>
                 </Button>
@@ -62,7 +63,7 @@ function Navigation(props) {
                   size="small"
                 // fullWidth
                 >
-                  <Link class="nav-link" to="/profile">
+                  <Link class="nav-link" to="/profile" style={{color:"white"}} >
                     My Profile
                   </Link>
                 </Button>

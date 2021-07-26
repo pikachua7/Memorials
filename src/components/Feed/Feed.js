@@ -3,7 +3,7 @@ import Web3 from "web3";
 import TroveIt from "../../abis/NFT.json";
 import { FingerprintSpinner } from "react-epic-spinners";
 import Favorite from "@material-ui/icons/Favorite";
-
+import Portis from '@portis/web3';
 import { NFTStorage, File, Blob } from 'nft.storage';
 
 
@@ -40,7 +40,9 @@ class Feed extends Component {
 
     async loadBlockchainData() {
 
-        const web3 = window.web3;
+        // const web3 = window.web3;
+        const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
+        const web3 = new Web3(portis.provider);
 
         // Initialize your dapp here like getting user accounts etc
         // Load account

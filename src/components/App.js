@@ -6,6 +6,7 @@ import Web3 from 'web3';
 import Upload from './Upload/Upload';
 import Feed from './Feed/Feed';
 import Profile from './Profile/Profile';
+import Portis from '@portis/web3';
 
 class App extends Component {
   async componentWillMount() {
@@ -27,7 +28,9 @@ class App extends Component {
   }
 
   async loadBlockchainData() {
-    const web3 = window.web3
+    // const web3 = window.web3
+    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
+    const web3 = new Web3(portis.provider);
     // Load account
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
