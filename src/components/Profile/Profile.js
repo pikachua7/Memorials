@@ -151,42 +151,10 @@ class Profile extends Component {
             <img src="https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif"></img>
           </div>
         ) : (
-          // <div>
-          //     <div className="about">
-          //         <div class="container">
-          //             <br></br>
-          //             <div
-          //                 class="col-lg-12 ml-auto mr-auto"
-          //                 style={{ maxWidth: "780px" }}
-          //             >
-          //                 {this.state.feedPosts.map((feedPost) => {
-          //                     return (
-          //                         <div className="card mb-4">
-
-          //                             <div className="card-header">
-          //                                 <small className="text-muted">{feedPost[0][1]}</small>
-          //                             </div>
-          //                             <ul
-          //                                 id="imageList"
-          //                                 className="list-group list-group-flush"
-          //                             >
-          //                                 <li className="list-group-item">
-          //                                     <p class="text-center">
-          //                                         {feedPost[0][4]},{feedPost[0][5]}
-          //                                     </p>
-          //                                     <p style={{ color: "black" }}>{feedPost[0][2]}</p>
-          //                                 </li>
-
-          //                             </ul>
-          //                         </div>
-          //                     );
-          //                 })}
-          //             </div>
-
-          //         </div>
-          //     </div>
-          // </div>
-          <ImageList rowHeight={180} className={style.imageList}>
+          <div>
+              <div className="about">
+                  <div class="container">
+                  <ImageList rowHeight={180} className={style.imageList}>
             <ImageListItem key="Subheader" cols={2} style={{ height: 'auto' }}>
               <ListSubheader component="div">December</ListSubheader>
             </ImageListItem>
@@ -205,6 +173,10 @@ class Profile extends Component {
               </ImageListItem>
             ))}
           </ImageList>
+                  </div>
+              </div>
+          </div>
+          
   )}
     </div>
     )
