@@ -12,8 +12,8 @@ contract Marketplace is MarketPlaceStorage{
     using AddressUtils for address;
     address payable MarketPlaceOwner;
     
-    constructor ( address payable _owner ) public {
-        MarketPlaceOwner = _owner;
+    constructor () public {
+        MarketPlaceOwner = msg.sender;
     }
     
     /**

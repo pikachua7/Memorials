@@ -54,6 +54,19 @@ function Navigation(props) {
               </li>
 
               <li
+                class={`nav-item  ${props.location.pathname === "/premium" ? "active" : ""
+                  }`}
+              > <Button
+                color="white"
+                // variant="contained"
+                size="small">
+                  <Link class="nav-link" to="/premium" style={{color:"white"}} >
+                    Premium
+                  </Link>
+                </Button>
+              </li>
+
+              <li
                 class={`nav-item  ${props.location.pathname === "/profile" ? "active" : ""
                   }`}
               >

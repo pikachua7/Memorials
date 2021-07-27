@@ -5,6 +5,7 @@ import TroveIt from '../abis/NFT.json'
 import Web3 from 'web3';
 import Upload from './Upload/Upload';
 import Feed from './Feed/Feed';
+import Premium from './Premium/Premium';
 import Profile from './Profile/Profile';
 import Portis from '@portis/web3';
 
@@ -67,6 +68,7 @@ class App extends Component {
           <Switch>           
             <Route path="/" exact component={() => <Upload/>} />
             <Route path ="/feed" exact component={()=><Feed/>}/>
+            <Route path ="/premium" exact component={()=><Premium/>}/>
             <Route path ="/profile" exact component={()=><Profile/>}/>
           </Switch>          
         </Router>
