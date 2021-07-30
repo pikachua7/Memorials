@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Web3 from "web3";
 import TroveIt from "../../abis/NFT.json";
+import MarketPlace from "../../abis/Marketplace.json";
 import { FingerprintSpinner } from "react-epic-spinners";
 import Favorite from "@material-ui/icons/Favorite";
 
@@ -33,6 +34,8 @@ const style = {
     color: 'rgba(255, 255, 255, 0.54)',
   },
 };
+
+const nftAddress = "0x0B7380Fc6730CD30e43e839d3Eca746bF0491867";
 
 class Profile extends Component {
   async componentWillMount() {
@@ -76,10 +79,13 @@ class Profile extends Component {
     // Network ID
     const networkId = await web3.eth.net.getId();
     const networkData = TroveIt.networks[networkId];
+    const networkDataM = MarketPlace.networks[networkId];
 
-    if (networkData) {
+    if (networkData && networkDataM) {
       const troveit = new web3.eth.Contract(TroveIt.abi, networkData.address);
+      const marketplace = new web3.eth.Contract(MarketPlace.abi, networkData.address);
       this.setState({ troveit });
+      this.setState({ marketplace });
 
       const PostCount = await troveit.methods.balanceOf(accounts[0]).call();
       console.log(PostCount)
@@ -118,16 +124,28 @@ class Profile extends Component {
 
   }
 
+  makePremium = (assetID, prize) => {
+    this.setState({ loading: true })   
+    console.log(assetID, prize)
+    this.state.marketplace.methods
+      .convertToPremium(nftAddress, assetID, prize)
+      .send({ from: this.state.account, value: 0 })
+      .on("transactionHash", (hash) => {
+        this.setState({ loading: false });
+      }); 
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       account: "",
       troveIt: null,
+      marketplace: null,
       PostCount: 0,
       feedPosts: [],
       loading: true,
-
     };
+    this.makePremium = this.makePremium.bind(this);
   }
 
   render() {
@@ -155,32 +173,35 @@ class Profile extends Component {
               <div className="about">
                   <div class="container">
                   <ImageList rowHeight={180} className={style.imageList}>
-            <ImageListItem key="Subheader" cols={2} style={{ height: 'auto' }}>
-              <ListSubheader component="div">December</ListSubheader>
-            </ImageListItem>
-            {this.state.feedPosts.map((feedPost) => (
-              <ImageListItem key={feedPost[0][2]}>
-                <img src={feedPost[0][3]}  />
-                <ImageListItemBar
-                  title={feedPost[0][1]}
-                  subtitle={<span>by: {feedPost[0][3]}</span>}
-                  actionIcon={
-                    <IconButton aria-label={`info about ${feedPost[0][4]}`} className={style.icon}>
-                      <InfoIcon />
-                    </IconButton>
-                  }
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+                    <ImageListItem key="Subheader" cols={2} style={{ height: 'auto' }}>
+                    </ImageListItem>
+                    {this.state.feedPosts.map((feedPost) => (
+                      <ImageListItem key={feedPost[0][2]}>
+                        {/* feedPost[0][1] : name, 2 : description 3: imagelink 4: latitude*/}
+                        <img src={feedPost[0][3]}  />
+                        <ImageListItemBar
+                          title={feedPost[0][1]}
+                          subtitle={<span>by: {feedPost[0][3]}</span>}
+                          actionIcon={
+                            <IconButton aria-label={`info about ${feedPost[0][4]}`} className={style.icon}
+                              onClick={(event) => {
+                                this.makePremium(1,1000);
+                              }}
+                            >
+                              <InfoIcon style={{color: "white"}}/>
+                            </IconButton>
+                          }
+                        />
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
                   </div>
               </div>
           </div>
-          
-  )}
-    </div>
-    )
-}
+      )}
+        </div>
+      )
+  }
 }
 
 export default Profile;
