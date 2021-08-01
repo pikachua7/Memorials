@@ -79,10 +79,10 @@ class Upload extends Component {
 
   async loadBlockchainData() {
 
-    // const web3 = window.web3;
+    const web3 = window.web3;
 
-    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
-    const web3 = new Web3(portis.provider);
+    // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
+    // const web3 = new Web3(portis.provider);
 
     // Initialize your dapp here like getting user accounts etc
     // Load account

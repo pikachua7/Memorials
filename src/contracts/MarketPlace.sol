@@ -23,6 +23,10 @@ contract Marketplace is MarketPlaceStorage{
         require(MarketPlaceOwner == msg.sender);
         _;
     }
+
+    function simple(uint256 number) public{
+        nftCounter=nftCounter+number;
+    }
     
     /**
     * @dev Creates a new order
@@ -31,21 +35,20 @@ contract Marketplace is MarketPlaceStorage{
     * @param priceInWei - Price in Wei for the supported coin
     */
     // msg.value - Publication Fee In Wei
-    
+
     function convertToPremium(
         address nftAddress,
         uint256 assetId,
         uint256 priceInWei
     )
-    public payable
+    public
     {
-        require(nftAddress.isContract(), "The NFT Address should be a contract");
+        // require(nftAddress.isContract(), "The NFT Address should be a contract");
         
         address sender = msg.sender;
-        address assetOwner = NFT(nftAddress).ownerOf(assetId);
+        address assetOwner = msg.sender;
 
-        require(sender == assetOwner, "Only the owner can create orders");
-        require(priceInWei > 0, "Price should be bigger than 0");
+        // require(priceInWei > 0, "Price should be bigger than 0");
         
         nftCounter = nftCounter.add(1);
         premiumNFT[nftCounter] = (assetId);

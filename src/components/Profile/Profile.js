@@ -35,7 +35,7 @@ const style = {
   },
 };
 
-const nftAddress = "0x0B7380Fc6730CD30e43e839d3Eca746bF0491867";
+const nftAddress = '0xF34987f8206C36266a8C9E01a417E75f1e3aECc3';
 
 class Profile extends Component {
   async componentWillMount() {
@@ -68,10 +68,11 @@ class Profile extends Component {
 
   async loadBlockchainData() {
 
-    // const web3 = window.web3;
-    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
-    const web3 = new Web3(portis.provider);
+    // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
+    // const web3 = new Web3(portis.provider);
 
+    const web3 = window.web3;
+    
     // Initialize your dapp here like getting user accounts etc
     // Load account
     const accounts = await web3.eth.getAccounts();
@@ -83,7 +84,7 @@ class Profile extends Component {
 
     if (networkData && networkDataM) {
       const troveit = new web3.eth.Contract(TroveIt.abi, networkData.address);
-      const marketplace = new web3.eth.Contract(MarketPlace.abi, networkData.address);
+      const marketplace = new web3.eth.Contract(MarketPlace.abi, networkDataM.address);
       this.setState({ troveit });
       this.setState({ marketplace });
 
@@ -128,9 +129,10 @@ class Profile extends Component {
     this.setState({ loading: true })   
     console.log(assetID, prize)
     this.state.marketplace.methods
-      .convertToPremium(nftAddress, assetID, prize)
+      .convertToPremium('0x221b8e62343565354C4458f4136C69b812Fc6D4B', 2, 100)
       .send({ from: this.state.account, value: 0 })
       .on("transactionHash", (hash) => {
+        console.log(hash)
         this.setState({ loading: false });
       }); 
   };

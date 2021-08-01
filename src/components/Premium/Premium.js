@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Web3 from "web3";
+import TroveI from "../../abis/NFT.json"; 
 import TroveIt from "../../abis/Marketplace.json";
 import { FingerprintSpinner } from "react-epic-spinners";
 import Favorite from "@material-ui/icons/Favorite";
@@ -18,7 +19,7 @@ const style = {
     },
 };
 
-class Feed extends Component {
+class Premium extends Component {
     async componentWillMount() {
         await this.loadWeb3();
         await this.loadBlockchainData();
@@ -40,9 +41,9 @@ class Feed extends Component {
 
     async loadBlockchainData() {
 
-        // const web3 = window.web3;
-        const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
-        const web3 = new Web3(portis.provider);
+        const web3 = window.web3;
+        // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
+        // const web3 = new Web3(portis.provider);
 
         // Initialize your dapp here like getting user accounts etc
         // Load account
@@ -58,18 +59,24 @@ class Feed extends Component {
         // Network ID
         const networkId = await web3.eth.net.getId();
         const networkData = TroveIt.networks[networkId];
+        const net = TroveI.networks[networkId];
 
-        if (networkData) {
+        if (networkData && net) {
             const troveit = new web3.eth.Contract(TroveIt.abi, networkData.address);
             this.setState({ troveit });
-
+            const trovei = new web3.eth.Contract(TroveI.abi, net.address);
+            this.setState({ trovei });
             const PostCount = await troveit.methods.nftCounter().call();
             console.log(PostCount)
             this.setState({ PostCount: PostCount })
-            for (var i = 0; i < this.state.PostCount; i++) {
-
-                const feedPost = await troveit.methods.premiumNFT(i).call()
+            for (var i = 0; i <= PostCount; i++) {
+                //feedPost : assetID
+                const assetID = await troveit.methods.premiumNFT(i).call()
+                console.log(assetID)
+                const feedPost = await trovei.methods.tokenURI(assetID).call()
+                console.log(feedPost)
                 const slicedUrl = `https://ipfs.io/ipfs/${feedPost.slice(7,feedPost.length)}`
+                console.log(slicedUrl)
                 const response = await fetch(slicedUrl);
                 console.log(response)
                 const json = await response.json();
@@ -103,7 +110,8 @@ class Feed extends Component {
         super(props);
         this.state = {
             account: "",
-            troveIt: null,
+            troveit: null,
+            trovei: null,
             PostCount: 0,
             feedPosts: [],
             loading: true,
@@ -184,4 +192,4 @@ class Feed extends Component {
     }
 }
 
-export default Feed;
+export default Premium;
