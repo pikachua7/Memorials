@@ -69,7 +69,8 @@ class Premium extends Component {
             const PostCount = await troveit.methods.nftCounter().call();
             console.log(PostCount)
             this.setState({ PostCount: PostCount })
-            for (var i = 0; i <= PostCount; i++) {
+            for (var i = 1; i <= PostCount; i++) {
+                console.log(i)
                 //feedPost : assetID
                 const assetID = await troveit.methods.premiumNFT(i).call()
                 console.log(assetID)

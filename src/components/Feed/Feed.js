@@ -67,7 +67,8 @@ class Feed extends Component {
             console.log(PostCount)
             this.setState({ PostCount: PostCount })
             for (var i = 0; i < this.state.PostCount; i++) {
-
+                const tokenOwner = await troveit.methods.ownerOf(i).call()
+                console.log(tokenOwner)
                 const feedPost = await troveit.methods.tokenURI(i).call()
                 const slicedUrl = `https://ipfs.io/ipfs/${feedPost.slice(7,feedPost.length)}`
                 const response = await fetch(slicedUrl);

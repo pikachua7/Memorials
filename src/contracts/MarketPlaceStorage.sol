@@ -26,7 +26,7 @@ contract MarketPlaceStorage {
   // nftCounter => assetID
   mapping (uint256 => uint256) public premiumNFT;
   
-  //
+  // asset id => aprroved Address for that asset id
   mapping (uint256 => address[]) public approvalList;
 
   // EVENTS

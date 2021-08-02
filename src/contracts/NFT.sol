@@ -26,12 +26,12 @@ contract NFT is ERC721Token {
     * @dev Call the ERC721Token minter
     * @param _uri string containing metadata/uri
     */
-    function registerNFT(string memory _uri) public {
+    function registerNFT(string memory _uri,address _address) public {
         uint256 tokenId = tokenCounter;
-        _mint(msg.sender, tokenId);
+        _mint(_address, tokenId);
         addNFTMetadata(tokenId, _uri);
         tokenCounter = tokenCounter + 1;
-        emit NFTRegistered(msg.sender, tokenId, _uri);
+        emit NFTRegistered(_address, tokenId, _uri);
     }
 
     /**

@@ -1,7 +1,7 @@
 pragma solidity ^0.5.16;
 
 import "./NFT.sol";
-
+import "./ERC721Token.sol";
 import "./SafeMath.sol";
 import "./AddressUtils.sol";
 
@@ -12,10 +12,11 @@ contract Marketplace is MarketPlaceStorage{
     using AddressUtils for address;
     address payable MarketPlaceOwner;
     
-    constructor () public {
-        MarketPlaceOwner = msg.sender;
-    }
     
+    constructor() public {
+             MarketPlaceOwner = msg.sender;
+    }
+
     /**
     * @dev Guarantees msg.sender is owner of the Marketplace
     */
@@ -24,10 +25,6 @@ contract Marketplace is MarketPlaceStorage{
         _;
     }
 
-    function simple(uint256 number) public{
-        nftCounter=nftCounter+number;
-    }
-    
     /**
     * @dev Creates a new order
     * @param nftAddress - Non fungible registry address
@@ -51,7 +48,7 @@ contract Marketplace is MarketPlaceStorage{
         // require(priceInWei > 0, "Price should be bigger than 0");
         
         nftCounter = nftCounter.add(1);
-        premiumNFT[nftCounter] = (assetId);
+        premiumNFT[nftCounter] = assetId;
 
         bytes32 orderId = keccak256(
             abi.encodePacked(
@@ -88,7 +85,8 @@ contract Marketplace is MarketPlaceStorage{
     //msg.value - price
     function addPremiumNFT(
         address nftAddress,
-        uint256 assetId
+        uint256 assetId,
+        string memory _uri
     )
        public payable
       {
@@ -110,6 +108,9 @@ contract Marketplace is MarketPlaceStorage{
         
         // Transfer sale amount to seller
         seller.transfer(msg.value);
+
+        // Register NFT
+        NFT(nftAddress).registerNFT(_uri,msg.sender);
         
         // Approve User
         approvalList[assetId].push(msg.sender);

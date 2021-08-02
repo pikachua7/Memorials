@@ -88,6 +88,9 @@ class Profile extends Component {
       this.setState({ troveit });
       this.setState({ marketplace });
 
+      this.setState({contractAddress:networkData.address});
+      console.log(this.state.contractAddress)
+
       const PostCount = await troveit.methods.balanceOf(accounts[0]).call();
       console.log(PostCount)
       this.setState({ PostCount: PostCount })
@@ -128,9 +131,10 @@ class Profile extends Component {
   makePremium = (assetID, prize) => {
     this.setState({ loading: true })   
     console.log(assetID, prize)
+    let tipAmount = window.web3.utils.toWei('1', 'Ether')
     this.state.marketplace.methods
-      .convertToPremium('0x221b8e62343565354C4458f4136C69b812Fc6D4B', 2, 100)
-      .send({ from: this.state.account, value: 0 })
+      .convertToPremium(this.state.contractAddress, assetID,tipAmount)
+      .send({ from: this.state.account})
       .on("transactionHash", (hash) => {
         console.log(hash)
         this.setState({ loading: false });
@@ -145,6 +149,7 @@ class Profile extends Component {
       marketplace: null,
       PostCount: 0,
       feedPosts: [],
+      contractAddress:null,
       loading: true,
     };
     this.makePremium = this.makePremium.bind(this);
@@ -183,11 +188,11 @@ class Profile extends Component {
                         <img src={feedPost[0][3]}  />
                         <ImageListItemBar
                           title={feedPost[0][1]}
-                          subtitle={<span>by: {feedPost[0][3]}</span>}
+                          subtitle={<span>{feedPost[0][2]}</span>}
                           actionIcon={
                             <IconButton aria-label={`info about ${feedPost[0][4]}`} className={style.icon}
                               onClick={(event) => {
-                                this.makePremium(1,1000);
+                                this.makePremium(feedPost[0][0],1000);
                               }}
                             >
                               <InfoIcon style={{color: "white"}}/>
