@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Web3 from "web3";
-import TroveI from "../../abis/NFT.json"; 
+import TroveI from "../../abis/NFT.json";
 import TroveIt from "../../abis/Marketplace.json";
 import { FingerprintSpinner } from "react-epic-spinners";
 import Favorite from "@material-ui/icons/Favorite";
@@ -51,11 +51,11 @@ class Premium extends Component {
         this.setState({ account: accounts[0] });
         navigator.geolocation.getCurrentPosition(
             position => this.setState({
-              cr_latitude: position.coords.latitude,
-              cr_longitude: position.coords.longitude
+                cr_latitude: position.coords.latitude,
+                cr_longitude: position.coords.longitude
             }),
             err => console.log(err)
-          );
+        );
         // Network ID
         const networkId = await web3.eth.net.getId();
         const networkData = TroveIt.networks[networkId];
@@ -70,32 +70,30 @@ class Premium extends Component {
             console.log(PostCount)
             this.setState({ PostCount: PostCount })
             for (var i = 1; i <= PostCount; i++) {
-                console.log(i)
-                //feedPost : assetID
                 const assetID = await troveit.methods.premiumNFT(i).call()
                 console.log(assetID)
                 const feedPost = await trovei.methods.tokenURI(assetID).call()
                 console.log(feedPost)
-                const slicedUrl = `https://ipfs.io/ipfs/${feedPost.slice(7,feedPost.length)}`
+                const slicedUrl = `https://ipfs.io/ipfs/${feedPost.slice(7, feedPost.length)}`
                 console.log(slicedUrl)
                 const response = await fetch(slicedUrl);
                 console.log(response)
                 const json = await response.json();
-                const latitude= json.properties.latitude
-                const longitude=json.properties.longitude
+                const latitude = json.properties.latitude
+                const longitude = json.properties.longitude
 
-                const imageUrl=json.image.slice(7,json.image.length-10)
+                const imageUrl = json.image.slice(7, json.image.length - 10)
                 console.log(imageUrl)
                 const finalUrl = `https://${imageUrl}.ipfs.dweb.link/trial.jpg`
                 console.log(finalUrl)
 
-                const Post=[i,json.name,json.description,finalUrl,latitude,longitude]
-                console.log(Post,this.state.feedPosts)
-                
+                const Post = [i, json.name, json.description, finalUrl, latitude, longitude]
+                console.log(Post, this.state.feedPosts)
+
                 this.setState({
                     feedPosts: [...this.state.feedPosts, [Post]],
                 });
-                console.log(Post,this.state.feedPosts)
+                console.log(Post, this.state.feedPosts)
             }
 
             this.setState({ loading: false });
@@ -116,8 +114,8 @@ class Premium extends Component {
             PostCount: 0,
             feedPosts: [],
             loading: true,
-            cr_latitude:'',
-            cr_longitude:''
+            cr_latitude: '',
+            cr_longitude: ''
         };
 
     }
@@ -128,16 +126,11 @@ class Premium extends Component {
                 style={{ width: "100%", height: "100%", backgroundRepeat: "inherit" }}
             >
                 {this.state.loading ? (
-                    <div className="center mt-19">
-                        {/* loader */}
-                        <br></br>
-                        {/* <FingerprintSpinner
-                            style={{ width: "100%" }}
-                            color="grey"
-                            size="100"
-                        /> */}
-                        <img src='https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif' ></img>
-                    </div>
+                    <div className="center mt-19" style={{display:'flex',justifyContent:'center'}}>
+                    {/* loader */}
+                    <img src='https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif' ></img>
+                    <br></br>
+                </div>
                 ) : (
                     <div>
                         <div className="about">
@@ -148,37 +141,37 @@ class Premium extends Component {
                                     class="col-lg-12 ml-auto mr-auto"
                                     style={{ maxWidth: "780px" }}
                                 >
-                                    {console.log(this.state.cr_latitude,this.state.cr_longitude)}
+                                    {console.log(this.state.cr_latitude, this.state.cr_longitude)}
                                     {this.state.feedPosts.map((feedPost) => {
-                                        if (this.state.cr_latitude===feedPost[0][4] && this.state.cr_longitude===feedPost[0][5]) {
-                                            
-                                        return (
-                                            <div className="card mb-4">
-                                                
-                                                <div className="card-header">
-                                                    <small className="text-muted">{feedPost[0][1]}</small>
+                                        if (this.state.cr_latitude === feedPost[0][4] && this.state.cr_longitude === feedPost[0][5]) {
+
+                                            return (
+                                                <div className="card mb-4">
+
+                                                    <div className="card-header">
+                                                        <small className="text-muted">{feedPost[0][1]}</small>
+                                                    </div>
+                                                    <ul
+                                                        id="imageList"
+                                                        className="list-group list-group-flush"
+                                                    >
+                                                        <li className="list-group-item">
+                                                            <p class="text-center">
+                                                                {this.state.cr_latitude - feedPost[0][4]},{this.state.cr_longitude}
+                                                                {feedPost[0][4]},{feedPost[0][5]}
+                                                                {console.log(this.state.cr_latitude, this.state.cr_longitude)}
+
+                                                                <img
+                                                                    src={feedPost[0][3]}
+                                                                    style={{ maxWidth: "420px" }}
+                                                                />
+                                                            </p>
+                                                            <p style={{ color: "black" }}>{feedPost[0][2]}</p>
+                                                        </li>
+
+                                                    </ul>
                                                 </div>
-                                                <ul
-                                                    id="imageList"
-                                                    className="list-group list-group-flush"
-                                                >
-                                                    <li className="list-group-item">
-                                                        <p class="text-center">
-                                                            {this.state.cr_latitude - feedPost[0][4]},{this.state.cr_longitude}
-                                                            {feedPost[0][4]},{feedPost[0][5]}
-                                                            {console.log(this.state.cr_latitude,this.state.cr_longitude)}
-
-                                                            <img
-                                src={feedPost[0][3]}
-                                style={{ maxWidth: "420px" }}
-                              />
-                                                        </p>
-                                                        <p style={{ color: "black" }}>{feedPost[0][2]}</p>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        );
+                                            );
                                         }
                                     })}
                                 </div>

@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Web3 from "web3";
 import TroveIt from "../../abis/NFT.json";
 import MarketPlace from "../../abis/Marketplace.json";
-import { FingerprintSpinner } from "react-epic-spinners";
-import Favorite from "@material-ui/icons/Favorite";
 
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
@@ -11,6 +9,7 @@ import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 
 import { NFTStorage, File, Blob } from 'nft.storage';
@@ -35,7 +34,6 @@ const style = {
   },
 };
 
-const nftAddress = '0xF34987f8206C36266a8C9E01a417E75f1e3aECc3';
 
 class Profile extends Component {
   async componentWillMount() {
@@ -72,7 +70,7 @@ class Profile extends Component {
     // const web3 = new Web3(portis.provider);
 
     const web3 = window.web3;
-    
+
     // Initialize your dapp here like getting user accounts etc
     // Load account
     const accounts = await web3.eth.getAccounts();
@@ -82,16 +80,48 @@ class Profile extends Component {
     const networkData = TroveIt.networks[networkId];
     const networkDataM = MarketPlace.networks[networkId];
 
+    navigator.geolocation.getCurrentPosition(
+      position => this.setState({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }),
+      err => console.log(err)
+    );
+
     if (networkData && networkDataM) {
       const troveit = new web3.eth.Contract(TroveIt.abi, networkData.address);
       const marketplace = new web3.eth.Contract(MarketPlace.abi, networkDataM.address);
       this.setState({ troveit });
       this.setState({ marketplace });
 
-      this.setState({contractAddress:networkData.address});
+      this.setState({ contractAddress: networkData.address });
       console.log(this.state.contractAddress)
 
-      const PostCount = await troveit.methods.balanceOf(accounts[0]).call();
+      let PostCount = await marketplace.methods.nftCounter().call();
+      console.log(PostCount)
+      this.setState({ PostCount: PostCount })
+      for (var i = 1; i <= PostCount; i++) {
+        console.log(i)
+        //feedPost : assetID
+        const assetID = await marketplace.methods.premiumNFT(i).call()
+        console.log(assetID)
+        const feedPost = await troveit.methods.tokenURI(assetID).call()
+        console.log(feedPost)
+        const slicedUrl = `https://ipfs.io/ipfs/${feedPost.slice(7, feedPost.length)}`
+        console.log(slicedUrl)
+        const response = await fetch(slicedUrl);
+        console.log(response)
+        const json = await response.json();
+        const latitude = json.properties.latitude
+        const longitude = json.properties.longitude
+        if (latitude === this.state.latitude && longitude === this.state.longitude) {
+          this.setState({ premiumAssetID: assetID })
+          this.setState({ premiumLocation: true })
+        }
+      }
+      console.log(this.state.premiumLocation)
+
+      PostCount = await troveit.methods.balanceOf(accounts[0]).call();
       console.log(PostCount)
       this.setState({ PostCount: PostCount })
       for (var i = 0; i < this.state.PostCount; i++) {
@@ -129,16 +159,16 @@ class Profile extends Component {
   }
 
   makePremium = (assetID, prize) => {
-    this.setState({ loading: true })   
+    this.setState({ loading: true })
     console.log(assetID, prize)
     let tipAmount = window.web3.utils.toWei('1', 'Ether')
     this.state.marketplace.methods
-      .convertToPremium(this.state.contractAddress, assetID,tipAmount)
-      .send({ from: this.state.account})
+      .convertToPremium(this.state.contractAddress, assetID, tipAmount)
+      .send({ from: this.state.account })
       .on("transactionHash", (hash) => {
         console.log(hash)
         this.setState({ loading: false });
-      }); 
+      });
   };
 
   constructor(props) {
@@ -149,8 +179,12 @@ class Profile extends Component {
       marketplace: null,
       PostCount: 0,
       feedPosts: [],
-      contractAddress:null,
+      contractAddress: null,
       loading: true,
+      latitude: '',
+      longitude: '',
+      premiumLocation: false,
+      premiumAssetID: null
     };
     this.makePremium = this.makePremium.bind(this);
   }
@@ -165,49 +199,44 @@ class Profile extends Component {
         }}
       >
         {this.state.loading ? (
-          <div className="center mt-19">
-            {/* loader */}
-            <br></br>
-            {/* <FingerprintSpinner
-                            style={{ width: "100%" }}
-                            color="grey"
-                            size="100"
-                        /> */}
-            <img src="https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif"></img>
-          </div>
+          <div className="center mt-19" style={{display:'flex',justifyContent:'center'}}>
+          {/* loader */}
+          <img src='https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif' ></img>
+          <br></br>
+      </div>
         ) : (
           <div>
-              <div className="about">
-                  <div class="container">
-                  <ImageList rowHeight={180} className={style.imageList}>
-                    <ImageListItem key="Subheader" cols={2} style={{ height: 'auto' }}>
-                    </ImageListItem>
-                    {this.state.feedPosts.map((feedPost) => (
-                      <ImageListItem key={feedPost[0][2]}>
-                        {/* feedPost[0][1] : name, 2 : description 3: imagelink 4: latitude*/}
-                        <img src={feedPost[0][3]}  />
-                        <ImageListItemBar
-                          title={feedPost[0][1]}
-                          subtitle={<span>{feedPost[0][2]}</span>}
-                          actionIcon={
+            <div className="about">
+              <div class="container">
+                <ImageList rowHeight={180} className={style.imageList}>
+                  <ImageListItem key="Subheader" cols={2} style={{ height: 'auto' }}>
+                  </ImageListItem>
+                  {this.state.feedPosts.map((feedPost) => (
+                    <ImageListItem key={feedPost[0][2]}>
+                      <img src={feedPost[0][3]} />
+                      <ImageListItemBar
+                        title={feedPost[0][1]}
+                        subtitle={<span>{feedPost[0][2]}</span>}
+                        actionIcon={
+                          this.state.premiumLocation ? (<div></div>) :
                             <IconButton aria-label={`info about ${feedPost[0][4]}`} className={style.icon}
                               onClick={(event) => {
-                                this.makePremium(feedPost[0][0],1000);
+                                this.makePremium(feedPost[0][0], 1000);
                               }}
                             >
-                              <InfoIcon style={{color: "white"}}/>
+                              <MonetizationOnIcon style={{ color: "white" }} />
                             </IconButton>
-                          }
-                        />
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
-                  </div>
+                        }
+                      />
+                    </ImageListItem>
+                  ))}
+                </ImageList>
               </div>
+            </div>
           </div>
-      )}
-        </div>
-      )
+        )}
+      </div>
+    )
   }
 }
 
