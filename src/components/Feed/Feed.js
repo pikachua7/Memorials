@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import Web3 from "web3";
 import TroveIt from "../../abis/NFT.json";
-import { FingerprintSpinner } from "react-epic-spinners";
-import Favorite from "@material-ui/icons/Favorite";
-import Portis from '@portis/web3';
-import { NFTStorage, File, Blob } from 'nft.storage';
-
+import IconButton from '@material-ui/core/IconButton';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
+import BeenhereIcon from '@material-ui/icons/Beenhere';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const style = {
     content: {
@@ -82,7 +81,7 @@ class Feed extends Component {
                 const finalUrl = `https://${imageUrl}.ipfs.dweb.link/trial.jpg`
                 console.log(finalUrl)
 
-                const Post = [i, json.name, json.description, finalUrl, latitude, longitude]
+                const Post = [i, json.name, json.description, finalUrl, latitude, longitude,tokenOwner]
                 console.log(Post, this.state.feedPosts)
 
                 this.setState({
@@ -132,7 +131,7 @@ class Feed extends Component {
                                 {/* <h1>{this.state.cr_latitude}</h1> */}
                                 <br></br>
                                 <div
-                                    class="col-lg-12 ml-auto mr-auto"
+                                    class="col-lg-6 ml-auto mr-auto"
                                     style={{ maxWidth: "780px" }}
                                 >
                                     {console.log(this.state.cr_latitude, this.state.cr_longitude)}
@@ -143,14 +142,34 @@ class Feed extends Component {
                                                 <div className="card mb-4">
 
                                                     <div className="card-header">
-                                                        <small className="text-muted">{feedPost[0][1]}</small>
+                                                        <small className="text-muted">
+                                                            <IconButton>
+                                                                <BeenhereIcon style={{ color: "black" }} />
+                                                            </IconButton>
+                                                            {feedPost[0][1]}
+                                                        </small>
+                                                        <div
+                                                            className="float-right pt-0"
+                                                            style={{
+                                                                margin: "auto",
+                                                                display: "block",
+                                                                width: "fit-content",
+                                                            }}
+                                                            >
+                                                            <small className="btn float-left pt-0">
+                                                                {feedPost[0][6]}
+                                                                <IconButton>
+                                                                    <AccountCircleIcon style={{ color: "black" }} />
+                                                                </IconButton>
+                                                            </small>
+                                                        </div>
                                                     </div>
                                                     <ul
                                                         id="imageList"
                                                         className="list-group list-group-flush"
                                                     >
-                                                        <li className="list-group-item">
-                                                            <p class="text-center">
+                                                        <li className="list-group-item" >
+                                                            <p className="text-center">
                                                                 {/* {feedPost[0][4]},{feedPost[0][5]} */}
                                                                 {console.log(this.state.cr_latitude, this.state.cr_longitude)}
 
@@ -159,7 +178,10 @@ class Feed extends Component {
                                                                     style={{ maxWidth: "420px" }}
                                                                 />
                                                             </p>
-                                                            <p style={{ color: "black" }}>{feedPost[0][2]}</p>
+                                                            <IconButton>
+                                                                <BeachAccessIcon style={{ color: "black" }} />
+                                                            </IconButton>
+                                                            <a style={{ color: "black" }}>{feedPost[0][2]}</a>
                                                         </li>
 
                                                     </ul>

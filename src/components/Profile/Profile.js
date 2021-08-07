@@ -10,6 +10,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 
 
 import { NFTStorage, File, Blob } from 'nft.storage';
@@ -208,15 +210,24 @@ class Profile extends Component {
           <div>
             <div className="about">
               <div class="container">
-                <ImageList rowHeight={180} className={style.imageList}>
+                <ImageList rowHeight={250} className={style.imageList}>
                   <ImageListItem key="Subheader" cols={2} style={{ height: 'auto' }}>
                   </ImageListItem>
                   {this.state.feedPosts.map((feedPost) => (
                     <ImageListItem key={feedPost[0][2]}>
                       <img src={feedPost[0][3]} />
-                      <ImageListItemBar
+                      <ImageListItemBar  style={{ height: 'auto' }}
                         title={feedPost[0][1]}
-                        subtitle={<span>{feedPost[0][2]}</span>}
+                        subtitle={<span>
+                          <IconButton>
+                          <BeachAccessIcon style={{ color: "white" }} />
+                        </IconButton>
+                        {feedPost[0][2]}<br></br>
+                          <IconButton>
+                            <LocationOnIcon style={{ color: "white" }} />
+                          </IconButton>
+                          {feedPost[0][4]},{feedPost[0][5]}
+                        </span>}
                         actionIcon={
                           this.state.premiumLocation ? (<div></div>) :
                             <IconButton aria-label={`info about ${feedPost[0][4]}`} className={style.icon}
