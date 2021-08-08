@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Portis from '@portis/web3';
 
 const style = {
     content: {
@@ -39,9 +40,13 @@ class Feed extends Component {
 
     async loadBlockchainData() {
 
-        const web3 = window.web3;
-        // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
-        // const web3 = new Web3(portis.provider);
+        // const web3 = window.web3;
+        const myLocalPOANode = {
+            nodeUrl: "https://matic-mumbai.chainstacklabs.com",
+            chainId: 80001,
+        };
+        const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', myLocalPOANode);
+        const web3 = new Web3(portis.provider);
 
         // Initialize your dapp here like getting user accounts etc
         // Load account
@@ -81,7 +86,7 @@ class Feed extends Component {
                 const finalUrl = `https://${imageUrl}.ipfs.dweb.link/trial.jpg`
                 console.log(finalUrl)
 
-                const Post = [i, json.name, json.description, finalUrl, latitude, longitude,tokenOwner]
+                const Post = [i, json.name, json.description, finalUrl, latitude, longitude, tokenOwner]
                 console.log(Post, this.state.feedPosts)
 
                 this.setState({
@@ -94,7 +99,7 @@ class Feed extends Component {
 
 
         } else {
-            window.alert("TroveIt contract not deployed to detected network.");
+            window.alert("NFT contract not deployed to detected network.");
         }
 
     }
@@ -119,7 +124,7 @@ class Feed extends Component {
                 style={{ width: "100%", height: "100%", backgroundRepeat: "inherit" }}
             >
                 {this.state.loading ? (
-                    <div className="center mt-19" style={{display:'flex',justifyContent:'center'}}>
+                    <div className="center mt-19" style={{ display: 'flex', justifyContent: 'center' }}>
                         {/* loader */}
                         <img src='https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif' ></img>
                         <br></br>
@@ -155,7 +160,7 @@ class Feed extends Component {
                                                                 display: "block",
                                                                 width: "fit-content",
                                                             }}
-                                                            >
+                                                        >
                                                             <small className="btn float-left pt-0">
                                                                 {feedPost[0][6]}
                                                                 <IconButton>

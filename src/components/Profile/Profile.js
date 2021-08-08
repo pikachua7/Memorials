@@ -68,10 +68,14 @@ class Profile extends Component {
 
   async loadBlockchainData() {
 
-    // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
-    // const web3 = new Web3(portis.provider);
+    const myLocalPOANode = {
+      nodeUrl: "https://matic-mumbai.chainstacklabs.com",
+      chainId: 80001,
+    };
+    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', myLocalPOANode);
+    const web3 = new Web3(portis.provider);
 
-    const web3 = window.web3;
+    // const web3 = window.web3;
 
     // Initialize your dapp here like getting user accounts etc
     // Load account
@@ -155,7 +159,7 @@ class Profile extends Component {
 
 
     } else {
-      window.alert("TroveIt contract not deployed to detected network.");
+      window.alert("NFT contract not deployed to detected network.");
     }
 
   }
@@ -201,11 +205,11 @@ class Profile extends Component {
         }}
       >
         {this.state.loading ? (
-          <div className="center mt-19" style={{display:'flex',justifyContent:'center'}}>
-          {/* loader */}
-          <img src='https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif' ></img>
-          <br></br>
-      </div>
+          <div className="center mt-19" style={{ display: 'flex', justifyContent: 'center' }}>
+            {/* loader */}
+            <img src='https://media.giphy.com/media/XeA5bZwGCQCxgKqKtL/giphy.gif' ></img>
+            <br></br>
+          </div>
         ) : (
           <div>
             <div className="about">
@@ -216,13 +220,13 @@ class Profile extends Component {
                   {this.state.feedPosts.map((feedPost) => (
                     <ImageListItem key={feedPost[0][2]}>
                       <img src={feedPost[0][3]} />
-                      <ImageListItemBar  style={{ height: 'auto' }}
+                      <ImageListItemBar style={{ height: 'auto' }}
                         title={feedPost[0][1]}
                         subtitle={<span>
                           <IconButton>
-                          <BeachAccessIcon style={{ color: "white" }} />
-                        </IconButton>
-                        {feedPost[0][2]}<br></br>
+                            <BeachAccessIcon style={{ color: "white" }} />
+                          </IconButton>
+                          {feedPost[0][2]}<br></br>
                           <IconButton>
                             <LocationOnIcon style={{ color: "white" }} />
                           </IconButton>

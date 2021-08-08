@@ -29,23 +29,31 @@ class App extends Component {
   }
 
   async loadBlockchainData() {
-    const web3 = window.web3
+    // const web3 = window.web3;
+
     // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
     // const web3 = new Web3(portis.provider);
+
+    const myLocalPOANode = {
+      nodeUrl: "https://matic-mumbai.chainstacklabs.com",
+      chainId: 80001,
+    };
+    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', myLocalPOANode);
+    const web3 = new Web3(portis.provider);
     // Load account
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
     // Network ID
     const networkId = await web3.eth.net.getId()
     const networkData = TroveIt.networks[networkId]
-    if(networkData) {
+    if (networkData) {
       const troveit = new web3.eth.Contract(TroveIt.abi, networkData.address)
       this.setState({ troveit })
 
-      this.setState({ loading: false})
+      this.setState({ loading: false })
 
     } else {
-      window.alert('TroveIt contract not deployed to detected network.')
+      window.alert('NFT contract not deployed to detected network.')
     }
   }
 
@@ -62,20 +70,20 @@ class App extends Component {
       // <div className="App" style={{backgroundSize: "cover",
       // height: "100vh",
       // color: "#f5f5f5"}}>
-        // {/* App NavBar */}
-        <Router>
-          <Navbar account={this.state.account}/>
-          <Switch>           
-            <Route path="/" exact component={() => <Upload/>} />
-            <Route path ="/feed" exact component={()=><Feed/>}/>
-            <Route path ="/premium" exact component={()=><Premium/>}/>
-            <Route path ="/profile" exact component={()=><Profile/>}/>
-          </Switch>          
-        </Router>
+      // {/* App NavBar */}
+      <Router>
+        <Navbar account={this.state.account} />
+        <Switch>
+          <Route path="/" exact component={() => <Upload />} />
+          <Route path="/feed" exact component={() => <Feed />} />
+          <Route path="/premium" exact component={() => <Premium />} />
+          <Route path="/profile" exact component={() => <Profile />} />
+        </Switch>
+      </Router>
       // </div>
     );
   }
-  
+
 }
 
 export default App;
